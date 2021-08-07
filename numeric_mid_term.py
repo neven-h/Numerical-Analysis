@@ -1,12 +1,12 @@
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 
+# divided differences
 def divdiff(x, y):
     # x : array of data points
     # y : array of y(x) data points
-    x.astype(float)
-    y.astype(float)
+
     c = np.copy(y)
     for k in range(1, len(x)):
         for i in range(len(x) - 1, k - 1, -1):
@@ -14,29 +14,42 @@ def divdiff(x, y):
     return c
 
 
-def interpnewt(c, x, xnew):
+def interpoly(x, y):
     # Degree of polynomial
-    p = c[n]
-    ynew = []
-    for i in range(len(xnew)):  # at every point of xnew
-        for k in range(1,
-                       len(x)):  # Calculate interp. recursively using Horner rule: p = c[n - k] + (xnew[i] - x[n - k]) * p
-            ynew.append(p)
-        return ynew
+    c = divdiff(x, y)
+    p = lambda k: sum([c[i] * np.prod([k - x[j] for j in range(i-1)]) for i in range(len(x))])
+    
+    return p, c
 
 
-f1 = lambda x: x
-f2 = lambda x: 1 / (1 + x ** 2)
-i1 = (0, 5)
-i2 = (0, 5)
-for f, I in zip([f1, f2], [i1, i2]):
-    N = np.array([i for i in range(1, 201)])
-for i in range(200):
-    n = N[i]
+def vector(n):
+    # arr = []
+    x = []
+    y = []
+    for i in range(1, n + 1):
+        x.append(-5 + 10 * ((i - 1) / (n - 1)))
+        y.append((1 / (1 + x[i - 1] ** 2)))
+    return x, y
 
 
+x, y = vector(5)
+p, c = interpoly(x, y)
+#print(p, c)
+x_example = np.linspace(-20, 20, 100)
+y_example = p(x_example)
+plt.plot(x_example, y_example, 'r')
+plt.show()
 
-# plt.yscale('log')
-# plot.plot(N, lin_errors)
-# plot.plot(N, cheb_errors)
-# plt.show()
+# x,y = vector(10)
+# print(p,c)
+#
+# p ,c = interpoly(x,y)
+# x,y = vector(15)
+# print(p,c)
+#
+# p ,c = interpoly(x,y)
+# x,y = vector(20)
+# print(p,c)
+
+
+# for i in range(len(c)+1):

@@ -18,7 +18,6 @@ def interpoly(x, y):
     # Degree of polynomial
     c = divdiff(x, y)
     p = lambda k: sum([c[i] * np.prod([k - x[j] for j in range(i-1)]) for i in range(len(x))])
-    
     return p, c
 
 
@@ -35,15 +34,14 @@ def vector(n):
 x, y = vector(5)
 p, c = interpoly(x, y)
 #print(p, c)
-x_example = np.linspace(-20, 20, 100)
+x_example = np.linspace(1, 20, 100)
 y_example = p(x_example)
-plt.plot(x_example, y_example, 'r')
-plt.show()
+# plt.plot(x_example, y_example, 'r')
+# plt.show()
 
-# x,y = vector(10)
-# print(p,c)
-#
-# p ,c = interpoly(x,y)
+x,y = vector(10)
+print(p,c)
+p ,c = interpoly(x,y)
 # x,y = vector(15)
 # print(p,c)
 #

@@ -33,6 +33,12 @@ def vector(n):
     return x, y
 
 
+# david's code
+x = np.array(x)
+result = coeffs[0]
+for coeff in coeffs[1:]:
+   result += coeff * x
+   x *= x
 
 # the attempt to print the actual polynomial 
 def main():

@@ -1,0 +1,76 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+# Q. no 2
+# divided differences
+def divdiff(x, y):
+    # x : array of data points
+    # y : array of y(x) data points
+
+    c = np.copy(y)
+    for k in range(1, len(x)):
+        for i in range(len(x) - 1, k - 1, -1):
+            c[i] = float(c[i] - c[i - 1]) / float(x[i] - x[i - k])
+    return c
+
+
+# the interpolation polynomial using the newton divided differences
+def interpoly(x, y):
+    # Degree of polynomial
+    c = divdiff(x, y)  # the coefficients for the interpolation polynimial
+    # The polynimal
+    p = lambda k: sum([c[i] * np.prod([k - x[j] for j in range(i)]) for i in range(len(x))])
+    return p, c
+
+
+def vector(n):
+    x = []
+    y = []
+    for i in range(1, n + 1):
+        x.append(-5 + 10 * ((i - 1) / (n - 1)))
+        y.append((1 / (1 + x[i - 1] ** 2)))
+    return x, y
+
+
+
+# the attempt to print the actual polynomial 
+def main():
+    n = int(input("enter n \n"))
+    x = vector(n)[0]
+    y = vector(n)[1]
+    p = interpoly(x, y)[0]
+    for i in range(n):
+        x += [(input("x%d is: \n" % i))]
+        y += [(input("y%d is: \n" % i))]
+    print("x = ", x, "y = ", y)
+    print(type(p))
+    poly = np.poly1d(p)
+    div = divdiff(vector(n)[0], vector(n)[1])
+    print("The interpolation polynomial is: \n", poly)
+    print("The divided differences are \n", div)
+    polyrange = np.linspace(vector(n)[0][0], vector(n)[0][-1], 100)
+    plt.figure()
+    plt.figure(poly)
+
+
+if __name__ == '__main__':
+    main()
+
+
+# colors = ['b', 'c', 'r', 'y']
+# for i in range(5, 25, 5):
+#     x, y = vector(i)
+#     p, c = interpoly(x, y)
+#     x_example = np.linspace(-3, 3, 100)
+#     y_example = [p(item) for item in x_example]
+#     plt.plot(x_example, y_example, colors[int((i / 5) - 1)], label=i)
+#
+# orig_func_x = np.linspace(-3, 3, 100)
+# orig_func_y = [1 / (1 + (item ** 2)) for item in orig_func_x]
+# plt.plot(orig_func_x, orig_func_y, 'black', label="1 / 1+x^2")
+#
+# plt.axhline(y=0, color='black', linestyle='-')
+# plt.axvline(x=0, color='black', linestyle='-')
+# plt.legend(loc='upper left')
+# plt.show()
